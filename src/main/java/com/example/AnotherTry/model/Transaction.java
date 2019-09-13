@@ -11,7 +11,8 @@ import java.util.Objects;
 @Table(name = "transactions")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Transaction {
-    private Integer code;
+    @Id
+    private Long code;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -19,15 +20,14 @@ public class Transaction {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyy-MM-dd HH:mm:ss")
     private LocalDateTime time;
 
-    @Id
     @Column(name = "contact_number")
     private Long contractNumber;
 
-    public Integer getCode() {
+    public Long getCode() {
         return code;
     }
 
-    public void setCode(Integer code) {
+    public void setCode(Long code) {
         this.code = code;
     }
 

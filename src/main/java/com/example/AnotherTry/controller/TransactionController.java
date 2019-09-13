@@ -20,17 +20,11 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @RequestMapping(value = "{contractNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Transaction> getTransaction(@PathVariable("contractNumber") Long contractNumber) {
-        if (contractNumber == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @RequestMapping(value = "{code}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<Transaction>> getTransactionsByCode(@PathVariable("code") Long code) {
+        List<Transaction> transactions = transactionService.getAllByCode(code);
 
-        Transaction transaction = transactionService.getByContractNumber(contractNumber);
-
-        if (transaction == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        return new ResponseEntity<>(transaction, HttpStatus.OK);
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -54,12 +48,12 @@ public class TransactionController {
         return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "{contractNumber}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Transaction> deleteTransaction(@PathVariable("contractNumber") Long contractNumber) {
-        Transaction transaction = transactionService.getByContractNumber(contractNumber);
+    @RequestMapping(value = "{code}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Transaction> deleteTransaction(@PathVariable("code") Long code) {
+        Transaction transaction = transactionService.getByCode(code);
         if (transaction == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        transactionService.delete(contractNumber);
+        transactionService.delete(code);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -72,5 +66,4 @@ public class TransactionController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
-
 }

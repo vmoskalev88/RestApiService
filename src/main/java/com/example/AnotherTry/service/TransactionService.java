@@ -6,12 +6,13 @@ import java.util.List;
 
 public interface TransactionService {
 
-    Transaction getByContractNumber(Long contractNumber);
+    Transaction getByCode(Long code);
 
     void save(Transaction transaction);
 
-    void delete(Long contractNumber); // по контр намберу?
+    void delete(Long code);
 
     List<Transaction> getAll();
 
+    List<Transaction> getAllByCode(Long code);
 }

@@ -4,9 +4,9 @@ import com.example.AnotherTry.model.Transaction;
 import com.example.AnotherTry.repo.TransactionRepo;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
-//todo сюда логирование добавить
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
@@ -17,8 +17,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction getByContractNumber(Long contractNumber) {
-        return transactionRepo.getOne(contractNumber);
+    public Transaction getByCode(Long code) {
+        return transactionRepo.getOne(code);
     }
 
     @Override
@@ -27,12 +27,21 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void delete(Long contractNumber) {
-        transactionRepo.deleteById((long) contractNumber);
+    public void delete(Long code) {
+        transactionRepo.deleteById(code);
     }
 
     @Override
     public List<Transaction> getAll() {
         return transactionRepo.findAll();
+    }
+
+    @Override
+    public List<Transaction> getAllByCode(Long code) {
+        List<Transaction> transactions = new ArrayList<>();
+        for (Transaction t : transactionRepo.findAll())
+            if (t.getCode().equals(code)) transactions.add(t);
+
+        return transactions;
     }
 }
