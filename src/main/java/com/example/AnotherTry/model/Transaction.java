@@ -1,13 +1,9 @@
 package com.example.AnotherTry.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -15,18 +11,31 @@ import java.util.Objects;
 @Table(name = "transactions")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Transaction {
-    private String status;
+    private Integer code;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyy-MM-dd HH:mm:ss")
     private LocalDateTime time;
+
     @Id
     @Column(name = "contact_number")
     private Long contractNumber;
 
-    public String getStatus() {
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
