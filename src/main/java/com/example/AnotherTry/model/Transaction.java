@@ -69,4 +69,14 @@ public class Transaction {
     public int hashCode() {
         return Objects.hash(status, time, contractNumber);
     }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "code=" + code +
+                ", status=" + status +
+                ", time=" + time +
+                ", contractNumber=" + contractNumber +
+                '}';
+    }
 }
