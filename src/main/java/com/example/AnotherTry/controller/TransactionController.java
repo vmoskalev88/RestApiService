@@ -20,10 +20,28 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @RequestMapping(value = "{code}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "code/{code}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<Transaction>> getTransactionsByCode(@PathVariable("code") Long code) {
         List<Transaction> transactions = transactionService.getAllByCode(code);
 
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "contract/{contractNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Transaction> getTransactionsByContract(@PathVariable("contractNumber") Long contractNumber) {
+        Transaction transaction = transactionService.getByContract(contractNumber);
+        if (transaction == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(transaction, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<Transaction>> getAllTransactions() {
+        List<Transaction> transactions = transactionService.getAll();
+
+        if (transactions.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
@@ -48,22 +66,13 @@ public class TransactionController {
         return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "{code}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Transaction> deleteTransaction(@PathVariable("code") Long code) {
-        Transaction transaction = transactionService.getByCode(code);
+    @RequestMapping(value = "contract/{contractNumber}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Transaction> deleteTransaction(@PathVariable("contractNumber") Long contractNumber) {
+        Transaction transaction = transactionService.getByContract(contractNumber);
         if (transaction == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        transactionService.delete(code);
+        transactionService.delete(contractNumber);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<Transaction>> getAllTransactions() {
-        List<Transaction> transactions = transactionService.getAll();
-
-        if (transactions.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 }

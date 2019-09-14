@@ -17,8 +17,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction getByCode(Long code) {
-        return transactionRepo.getOne(code);
+    public Transaction getByContract(Long contractNumber) {
+        return transactionRepo.getOne(contractNumber);
     }
 
     @Override

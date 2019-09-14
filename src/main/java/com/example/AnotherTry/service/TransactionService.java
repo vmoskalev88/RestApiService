@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TransactionService {
 
-    Transaction getByCode(Long code);
+    Transaction getByContract(Long contractNumber);
 
     void save(Transaction transaction);
 
