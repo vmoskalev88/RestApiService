@@ -2,6 +2,7 @@ package com.example.AnotherTry.controller;
 
 import com.example.AnotherTry.model.Transaction;
 import com.example.AnotherTry.service.TransactionService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -55,13 +56,13 @@ public class TransactionController {
         return new ResponseEntity<>(transaction, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Transaction> updateTransaction(@RequestBody Transaction transaction) {
-        if (transaction == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-        transaction.setTime(LocalDateTime.now());
-        transactionService.save(transaction);
+    @RequestMapping(value = "contract/{contractNumber}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Transaction> updateTransaction(
+            @PathVariable("contractNumber") Transaction transactionFromDb,
+            @RequestBody Transaction transaction) {
+        BeanUtils.copyProperties(transaction, transactionFromDb, "contractNumber");
+        transactionFromDb.setTime(LocalDateTime.now());
+        transactionService.save(transactionFromDb);
 
         return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
